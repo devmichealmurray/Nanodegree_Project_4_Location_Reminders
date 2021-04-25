@@ -2,7 +2,7 @@ package com.udacity.project4.ui.reminderslist
 
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseRecyclerViewAdapter
-import com.udacity.project4.data.model.ReminderDataItem
+import com.udacity.project4.data.model.local.ReminderDataItem
 
 
 //Use data binding to show the reminder on the item

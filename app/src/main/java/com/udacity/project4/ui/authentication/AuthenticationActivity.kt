@@ -29,16 +29,16 @@ class AuthenticationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authActivityBinding = DataBindingUtil.setContentView(this, R.layout.activity_authentication)
+        authActivityBinding.activity = this
     }
 
     override fun onStart() {
         super.onStart()
-        authActivityBinding.loginButton.setOnClickListener { launchSignIn() }
         authViewModel.authenticationState.observe(this, authStateObserver)
     }
 
 
-    private fun launchSignIn() {
+    fun launchSignIn() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build(),
             AuthUI.IdpConfig.FacebookBuilder().build(),
@@ -49,16 +49,12 @@ class AuthenticationActivity : AppCompatActivity() {
             .createSignInIntentBuilder()
             .setTheme(R.style.AuthUITheme)
             .setLogo(R.drawable.map)
+            .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .build()
             .apply {
                 startForResult.launch(this)
             }
-    }
-
-    private val authStateObserver = Observer<AuthenticationStates> { authState ->
-        if (authState == AuthenticationStates.AUTHENTICATED)
-            startActivity(Intent(this, RemindersActivity::class.java))
     }
 
     private fun resultHandler(result: ActivityResult) {
@@ -75,6 +71,9 @@ class AuthenticationActivity : AppCompatActivity() {
         }
     }
 
-
+    private val authStateObserver = Observer<AuthenticationStates> { authState ->
+        if (authState == AuthenticationStates.AUTHENTICATED)
+            startActivity(Intent(this, RemindersActivity::class.java))
+    }
 
 }

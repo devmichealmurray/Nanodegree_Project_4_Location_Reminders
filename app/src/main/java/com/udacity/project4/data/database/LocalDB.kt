@@ -1,4 +1,4 @@
-package com.udacity.project4.data.local
+package com.udacity.project4.data.database
 
 import android.content.Context
 import androidx.room.Room

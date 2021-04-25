@@ -5,9 +5,16 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
+        <variable
+            name="fragment"
+            type="com.udacity.project4.ui.savereminder.SaveReminderFragment" />
+
         <variable
             name="viewModel"
             type="com.udacity.project4.ui.savereminder.SaveReminderViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,6 +54,7 @@
             android:drawableLeft="@drawable/ic_location"
             android:focusable="true"
             android:gravity="center_vertical"
+            android:onClick="@{() -> fragment.navigateToSelectLocation()}"
             android:text="@string/reminder_location"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"

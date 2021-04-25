@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.JobIntentService
 import com.google.android.gms.location.Geofence
-import com.udacity.project4.data.dto.ReminderDTO
-import com.udacity.project4.data.dto.Result
-import com.udacity.project4.data.local.RemindersLocalRepository
-import com.udacity.project4.data.model.ReminderDataItem
+import com.udacity.project4.data.model.entity.ReminderEntity
+import com.udacity.project4.utils.Result
+import com.udacity.project4.data.repository.RemindersLocalRepository
+import com.udacity.project4.data.model.local.ReminderDataItem
 import com.udacity.project4.utils.sendNotification
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
@@ -40,7 +40,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
 
     //TODO: get the request id of the current geofence
     private fun sendNotification(triggeringGeofences: List<Geofence>) {
-        val requestId = ""
+        val requestId = -1L
 
         //Get the local repository instance
         val remindersLocalRepository: RemindersLocalRepository by inject()
@@ -48,17 +48,18 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
         CoroutineScope(coroutineContext).launch(SupervisorJob()) {
             //get the reminder with the request id
             val result = remindersLocalRepository.getReminder(requestId)
-            if (result is Result.Success<ReminderDTO>) {
+            if (result is Result.Success<ReminderEntity>) {
                 val reminderDTO = result.data
                 //send a notification to the user with the reminder details
                 sendNotification(
                     this@GeofenceTransitionsJobIntentService, ReminderDataItem(
+                        reminderDTO.uid,
                         reminderDTO.title,
                         reminderDTO.description,
                         reminderDTO.location,
                         reminderDTO.latitude,
-                        reminderDTO.longitude,
-                        reminderDTO.id
+                        reminderDTO.longitude
+
                     )
                 )
             }

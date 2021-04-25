@@ -1,8 +1,9 @@
-package com.udacity.project4.data.local
+package com.udacity.project4.data.repository
 
-import com.udacity.project4.data.ReminderDataSource
-import com.udacity.project4.data.dto.ReminderDTO
-import com.udacity.project4.data.dto.Result
+import com.udacity.project4.data.database.ReminderDataSource
+import com.udacity.project4.data.database.RemindersDao
+import com.udacity.project4.data.model.entity.ReminderEntity
+import com.udacity.project4.utils.Result
 import kotlinx.coroutines.*
 
 /**
@@ -20,9 +21,9 @@ class RemindersLocalRepository(
 
     /**
      * Get the reminders list from the local db
-     * @return Result the holds a Success with all the reminders or an Error object with the error message
+     * @return Result holds a Success with all the reminders or an Error object with the error message
      */
-    override suspend fun getReminders(): Result<List<ReminderDTO>> = withContext(ioDispatcher) {
+    override suspend fun getReminders(): Result<List<ReminderEntity>> = withContext(ioDispatcher) {
         return@withContext try {
             Result.Success(remindersDao.getReminders())
         } catch (ex: Exception) {
@@ -34,7 +35,7 @@ class RemindersLocalRepository(
      * Insert a reminder in the db.
      * @param reminder the reminder to be inserted
      */
-    override suspend fun saveReminder(reminder: ReminderDTO) =
+    override suspend fun saveReminder(reminder: ReminderEntity) =
         withContext(ioDispatcher) {
             remindersDao.saveReminder(reminder)
         }
@@ -44,7 +45,7 @@ class RemindersLocalRepository(
      * @param id to be used to get the reminder
      * @return Result the holds a Success object with the Reminder or an Error object with the error message
      */
-    override suspend fun getReminder(id: String): Result<ReminderDTO> = withContext(ioDispatcher) {
+    override suspend fun getReminder(id: Long): Result<ReminderEntity> = withContext(ioDispatcher) {
         try {
             val reminder = remindersDao.getReminderById(id)
             if (reminder != null) {

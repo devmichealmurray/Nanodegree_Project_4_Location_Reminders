@@ -1,9 +1,9 @@
 package com.udacity.project4
 
 import android.app.Application
-import com.udacity.project4.data.ReminderDataSource
-import com.udacity.project4.data.local.LocalDB
-import com.udacity.project4.data.local.RemindersLocalRepository
+import com.udacity.project4.data.database.ReminderDataSource
+import com.udacity.project4.data.database.LocalDB
+import com.udacity.project4.data.repository.RemindersLocalRepository
 import com.udacity.project4.ui.reminderslist.RemindersListViewModel
 import com.udacity.project4.ui.savereminder.SaveReminderViewModel
 import org.koin.android.ext.koin.androidContext
