@@ -139,7 +139,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private fun launchPoiConfirmation(poi: PointOfInterest) {
         alert {
             title = getString(R.string.save_location)
-            message = "Would You Like To Save The Location ${poi.name}?"
+            message = "Would You Like To Save The Location ${poi.name}? \n ${poi.latLng.latitude} \n ${poi.latLng.longitude}"
             isCancelable = false
             positiveButton(getString(R.string.save_location)) { dialog ->
                 Toast.makeText(context, "Location Stored!", Toast.LENGTH_SHORT).show()

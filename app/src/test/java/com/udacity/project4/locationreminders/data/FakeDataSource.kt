@@ -17,7 +17,7 @@ class FakeDataSource : ReminderDataSource {
         TODO("save the reminder")
     }
 
-    override suspend fun getReminder(id: String): Result<ReminderEntity> {
+    override suspend fun getReminder(id: Long): Result<ReminderEntity> {
         TODO("return the reminder with the id")
     }
 

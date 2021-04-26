@@ -1,4 +1,4 @@
-package com.udacity.project4.locationreminders.geofence
+package com.udacity.project4.utils.geofence
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,14 +10,17 @@ import android.content.Intent
  *
  * Or users can add the reminders and then close the app, So our app has to run in the background
  * and handle the geofencing in the background.
- * To do that you can use https://developer.android.com/reference/android/support/v4/app/JobIntentService to do that.
+ * To do that you can use https://developer.android.com/reference/android/support/v4/app/JobIntentService
  *
  */
 
-class GeofenceBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+private const val TAG = "* * GeofenceBroadcastReceiver * *"
 
-//TODO: implement the onReceive method to receive the geofencing events at the background
+class GeofenceBroadcastReceiver : BroadcastReceiver() {
+
+    override fun onReceive(context: Context, intent: Intent) {
+        // implement the onReceive method to receive the geofencing events at the background
+        GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
 
     }
 }

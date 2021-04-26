@@ -11,11 +11,11 @@ interface RemindersDao {
     @Query("SELECT * FROM reminders")
     fun getReminders(): List<ReminderEntity>
 
-    @Query("SELECT * FROM reminders where uid = :reminderId")
+    @Query("SELECT * FROM reminders WHERE uid = :reminderId")
     fun getReminderById(reminderId: Long): ReminderEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveReminder(reminder: ReminderEntity)
+    fun saveReminder(reminder: ReminderEntity) : Long
 
     @Query("DELETE FROM reminders")
     fun deleteAllReminders()

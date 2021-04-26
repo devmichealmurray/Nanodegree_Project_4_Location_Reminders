@@ -8,7 +8,7 @@ import com.udacity.project4.utils.Result
  */
 interface ReminderDataSource {
     suspend fun getReminders(): Result<List<ReminderEntity>>
-    suspend fun saveReminder(reminder: ReminderEntity)
+    suspend fun saveReminder(reminder: ReminderEntity) : Long
     suspend fun getReminder(id: Long): Result<ReminderEntity>
     suspend fun deleteAllReminders()
 }

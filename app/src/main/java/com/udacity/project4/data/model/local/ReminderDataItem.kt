@@ -6,7 +6,7 @@ import java.io.Serializable
  * data class acts as a data mapper between the DB and the UI
  */
 data class ReminderDataItem(
-    val uid: Long?,
+    val uid: Long = -1L,
     var title: String?,
     var description: String?,
     var location: String?,

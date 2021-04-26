@@ -65,7 +65,7 @@ class RemindersListViewModel(
                     longitude = reminder.longitude,
                 )
             })
-            _remindersList.value = dataList
+            _remindersList.postValue(dataList)
         }
 
 }

@@ -7,7 +7,7 @@ import com.udacity.project4.data.model.entity.ReminderEntity
 /**
  * The Room Database that contains the reminders table.
  */
-@Database(entities = [ReminderEntity::class], version = 2, exportSchema = false)
+@Database(entities = [ReminderEntity::class], version = 4, exportSchema = false)
 abstract class RemindersDatabase : RoomDatabase() {
 
     abstract fun reminderDao(): RemindersDao

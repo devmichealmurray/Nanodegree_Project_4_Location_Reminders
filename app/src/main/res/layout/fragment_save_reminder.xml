@@ -78,6 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_normal"
+            android:clickable="true"
+            android:onClick="@{() -> viewModel.prepLocationForDb()}"
             android:fadeVisible="@{!viewModel.showLoading.booleanValue()}"
             android:src="@drawable/ic_save"
             app:fabSize="normal"

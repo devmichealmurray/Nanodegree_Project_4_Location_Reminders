@@ -15,8 +15,9 @@ object LocalDB {
     fun createRemindersDao(context: Context): RemindersDao {
         return Room.databaseBuilder(
             context.applicationContext,
-            RemindersDatabase::class.java, "locationReminders.db"
-        ).build().reminderDao()
+            RemindersDatabase::class.java,
+            "locationReminders.db"
+        ).fallbackToDestructiveMigration().build().reminderDao()
     }
 
 }
