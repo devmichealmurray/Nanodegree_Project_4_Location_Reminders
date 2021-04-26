@@ -49,7 +49,6 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         _selectedPOI.value = null
         _latitude.value = null
         _longitude.value = null
-        _sendGeoFenceRequest.value = null
         _saveCompleted.value = false
     }
 
@@ -58,6 +57,10 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         _reminderSelectedLocationStr.value = poi.name
         _longitude.value = poi.latLng.longitude
         _latitude.value = poi.latLng.latitude
+    }
+
+    fun clearGeofenceRequest() {
+        _sendGeoFenceRequest.value = null
     }
 
     fun prepLocationForDb() {
@@ -140,20 +143,6 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
             .addGeofence(geofence)
             .build()
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

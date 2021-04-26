@@ -19,6 +19,9 @@ class SaveReminderFragment : BaseFragment() {
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSaveReminderBinding
 
+    private val runningQOrLater =
+        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,11 +56,12 @@ class SaveReminderFragment : BaseFragment() {
 
     private val sendGeoFenceRequestObserver = Observer<GeofencingRequest> { geofenceRequest ->
         (activity as RemindersActivity).addGeoFences(geofenceRequest)
+        viewModel.clearGeofenceRequest()
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        //make sure to clear the view model after destroy, as it's a single view model.
-//        viewModel.onClear()
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        //make sure to clear the view model after destroy, as it's a single view model.
+        viewModel.onClear()
+    }
 }
