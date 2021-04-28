@@ -10,17 +10,14 @@ import com.google.android.gms.location.GeofencingRequest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
-import com.udacity.project4.ui.RemindersActivity
+import com.udacity.project4.ui.activities.RemindersActivity
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
 class SaveReminderFragment : BaseFragment() {
-    //Get the view model this time as a single to be shared with the another fragment
+
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSaveReminderBinding
-
-    private val runningQOrLater =
-        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,17 +34,7 @@ class SaveReminderFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.apply {
-            saveCompleted.observe(viewLifecycleOwner, saveCompletedObserver)
-            sendGeoFenceRequest.observe(viewLifecycleOwner, sendGeoFenceRequestObserver)
-        }
-    }
-
-    private val saveCompletedObserver = Observer<Boolean> { isSaveCompleted ->
-        if (isSaveCompleted) {
-            viewModel.onClear()
-            findNavController().navigate(R.id.action_saveReminderFragment_to_reminderListFragment)
-        }
+        viewModel.sendGeoFenceRequest.observe(viewLifecycleOwner, sendGeoFenceRequestObserver)
     }
 
     fun navigateToSelectLocation() {
@@ -55,13 +42,11 @@ class SaveReminderFragment : BaseFragment() {
     }
 
     private val sendGeoFenceRequestObserver = Observer<GeofencingRequest> { geofenceRequest ->
-        (activity as RemindersActivity).addGeoFences(geofenceRequest)
-        viewModel.clearGeofenceRequest()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //make sure to clear the view model after destroy, as it's a single view model.
-        viewModel.onClear()
+        if (geofenceRequest != null) {
+            (activity as RemindersActivity).addGeoFences(geofenceRequest)
+            viewModel.clearGeofenceRequest()
+            viewModel.onClear()
+            findNavController().navigate(R.id.action_saveReminderFragment_to_reminderListFragment)
+        }
     }
 }

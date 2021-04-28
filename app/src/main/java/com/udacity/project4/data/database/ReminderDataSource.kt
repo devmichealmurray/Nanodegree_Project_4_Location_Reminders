@@ -11,4 +11,5 @@ interface ReminderDataSource {
     suspend fun saveReminder(reminder: ReminderEntity) : Long
     suspend fun getReminder(id: Long): Result<ReminderEntity>
     suspend fun deleteAllReminders()
+    suspend fun deleteReminderById(id: Long)
 }

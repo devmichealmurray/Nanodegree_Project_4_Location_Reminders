@@ -31,6 +31,11 @@
     <string name="lat_long_snippet">Lat: %1$.5f, Long: %2$.5f</string>
     <string name="save_location">Save Location</string>
     <string name="cancel">Cancel</string>
+    <string name="location_stored">Location Stored!</string>
+    <string name="current_location_required">Current Location Required</string>
+    <string name="permission_rationale_message">Location Permission Needed To Show Current Location On Map</string>
+    <string name="permission_rationale_positive_btn">Grant Permission</string>
+    <string name="permission_rationale_negative_btn">Cancel Request</string>
 
     <!-- Facebook Application ID -->
     <string name="facebook_application_id" translatable="false">478847236784782</string>
@@ -39,7 +44,6 @@
 
     <string name="retry">Retry</string>
     <string name="no_data">No Data</string>
-
     <string name="save">Save</string>
     <string name="reminder_saved">Reminder Saved!</string>
     <string name="title_activity_maps">Map</string>
@@ -65,7 +69,9 @@
     <string name="error_happened">Error happened</string>
     <string name="error">Error!</string>
     <string name="okay">Okay</string>
-
+    <string name="geofence_reminder">Geofence Reminder</string>
+    <string name="delete_reminder">Delete Reminder</string>
+    <string name="return_to_app">Return To App</string>
 
 
 </resources>

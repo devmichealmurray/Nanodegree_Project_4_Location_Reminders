@@ -33,9 +33,6 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     private val _longitude by lazy { MutableLiveData<Double>() }
     val longitude: LiveData<Double> get() = _longitude
 
-    private val _saveCompleted by lazy { MutableLiveData<Boolean>() }
-    val saveCompleted: LiveData<Boolean> get() = _saveCompleted
-
     private val _sendGeoFenceRequest by lazy { MutableLiveData<GeofencingRequest>() }
     val sendGeoFenceRequest: LiveData<GeofencingRequest> get() = _sendGeoFenceRequest
 
@@ -49,7 +46,6 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         _selectedPOI.value = null
         _latitude.value = null
         _longitude.value = null
-        _saveCompleted.value = false
     }
 
     fun storePoi(poi: PointOfInterest) {
@@ -84,28 +80,6 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     }
 
     /**
-     * Save the reminder to the data source
-     */
-    private fun saveReminder(reminderData: ReminderDataItem) {
-        showLoading.value = true
-        viewModelScope.launch {
-            val savedId = dataSource.saveReminder(
-                ReminderEntity(
-                    title = reminderData.title,
-                    description = reminderData.description,
-                    location = reminderData.location,
-                    latitude = reminderData.latitude,
-                    longitude = reminderData.longitude,
-                )
-            )
-            geoFenceBuilder(savedId, reminderData)
-            showLoading.value = false
-            showToast.value = app.getString(R.string.reminder_saved)
-            _saveCompleted.postValue(true)
-        }
-    }
-
-    /**
      * Validate the entered data and show error to the user if there's any invalid data
      */
     private fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
@@ -125,6 +99,29 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         }
         return true
     }
+
+    /**
+     * Save the reminder to the data source
+     */
+    private fun saveReminder(reminderData: ReminderDataItem) {
+        showLoading.value = true
+        viewModelScope.launch {
+            val savedId = dataSource.saveReminder(
+                ReminderEntity(
+                    title = reminderData.title,
+                    description = reminderData.description,
+                    location = reminderData.location,
+                    latitude = reminderData.latitude,
+                    longitude = reminderData.longitude,
+                )
+            )
+            geoFenceBuilder(savedId, reminderData)
+            showLoading.value = false
+            showToast.value = app.getString(R.string.reminder_saved)
+        }
+    }
+
+
 
     private fun geoFenceBuilder(id: Long, reminder: ReminderDataItem) {
         val geofence = Geofence.Builder()

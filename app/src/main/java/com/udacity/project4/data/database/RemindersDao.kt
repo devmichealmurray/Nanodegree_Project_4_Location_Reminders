@@ -20,4 +20,6 @@ interface RemindersDao {
     @Query("DELETE FROM reminders")
     fun deleteAllReminders()
 
+    @Query("DELETE FROM reminders WHERE uid = :reminderId")
+    fun deleteReminderById(reminderId: Long)
 }

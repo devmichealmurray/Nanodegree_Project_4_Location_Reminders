@@ -14,7 +14,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.udacity.project4.R
 import com.udacity.project4.databinding.ActivityAuthenticationBinding
-import com.udacity.project4.ui.RemindersActivity
+import com.udacity.project4.ui.activities.RemindersActivity
 import com.udacity.project4.utils.AuthenticationStates
 
 private const val TAG = "* * AuthenticationActivity * *"
