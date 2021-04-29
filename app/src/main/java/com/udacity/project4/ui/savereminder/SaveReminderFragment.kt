@@ -44,6 +44,7 @@ class SaveReminderFragment : BaseFragment() {
     private val sendGeoFenceRequestObserver = Observer<GeofencingRequest> { geofenceRequest ->
         if (geofenceRequest != null) {
             (activity as RemindersActivity).addGeoFences(geofenceRequest)
+           val huh = geofenceRequest.initialTrigger
             viewModel.clearGeofenceRequest()
             viewModel.onClear()
             findNavController().navigate(R.id.action_saveReminderFragment_to_reminderListFragment)

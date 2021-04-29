@@ -2,9 +2,11 @@ package com.udacity.project4.ui.reminderslist
 
 import android.os.Bundle
 import android.view.*
+import androidx.lifecycle.Observer
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
+import com.udacity.project4.data.model.local.ReminderDataItem
 import com.udacity.project4.databinding.FragmentRemindersBinding
 import com.udacity.project4.utils.setup
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,9 +31,17 @@ class ReminderListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.remindersList.observe(viewLifecycleOwner, remindersListObserver)
+    }
 
-        // Probably remove
-        setupRecyclerView()
+    private val remindersListObserver = Observer<List<ReminderDataItem>> { list ->
+        if (!list.isNullOrEmpty()) {
+            binding.apply {
+                progressBar.visibility = View.INVISIBLE
+                noDataTextView.visibility = View.INVISIBLE
+                remindersRecyclerView.setup(RemindersListAdapter{ })
+            }
+        }
     }
 
     override fun onResume() {
@@ -49,18 +59,8 @@ class ReminderListFragment : BaseFragment() {
         )
     }
 
-    private fun setupRecyclerView() {
-        val adapter = RemindersListAdapter {
-        }
-
-//        setup the recycler view using the extension function
-        binding.remindersRecyclerView.setup(adapter)
-    }
-
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-//        display logout as menu item
         inflater.inflate(R.menu.main_menu, menu)
     }
 

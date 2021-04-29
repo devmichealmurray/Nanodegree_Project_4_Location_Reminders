@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
@@ -27,6 +28,9 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     private val _selectedPOI by lazy { MutableLiveData<PointOfInterest>() }
     val selectedPOI: LiveData<PointOfInterest> get() = _selectedPOI
 
+    private val _selectedLocation by lazy { MutableLiveData<LatLng>() }
+    val selectedLocation: LiveData<LatLng> get() = _selectedLocation
+
     private val _latitude by lazy { MutableLiveData<Double>() }
     val latitude: LiveData<Double> get() = _latitude
 
@@ -36,16 +40,25 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     private val _sendGeoFenceRequest by lazy { MutableLiveData<GeofencingRequest>() }
     val sendGeoFenceRequest: LiveData<GeofencingRequest> get() = _sendGeoFenceRequest
 
+
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */
+
+    init {
+        _latitude.value = 0.00
+        _longitude.value = 0.00
+        _sendGeoFenceRequest.value = null
+    }
+
     fun onClear() {
         reminderTitle.value = null
         reminderDescription.value = null
         _reminderSelectedLocationStr.value = null
         _selectedPOI.value = null
-        _latitude.value = null
-        _longitude.value = null
+        _selectedLocation.value = null
+        _latitude.value = 0.00
+        _longitude.value = 0.00
     }
 
     fun storePoi(poi: PointOfInterest) {
@@ -53,6 +66,13 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         _reminderSelectedLocationStr.value = poi.name
         _longitude.value = poi.latLng.longitude
         _latitude.value = poi.latLng.latitude
+    }
+
+    fun storeLocation(location: LatLng) {
+        _selectedLocation.value = location
+        _reminderSelectedLocationStr.value = "Unknown Location"
+        _longitude.value = location.longitude
+        _latitude.value = location.latitude
     }
 
     fun clearGeofenceRequest() {
@@ -89,7 +109,7 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         }
 
         if (reminderData.description.isNullOrEmpty()) {
-            showSnackBar.value = R.string.err_enter_desc.toString()
+            showSnackBarInt.value = R.string.err_enter_desc
             return false
         }
 
@@ -123,7 +143,7 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
 
 
 
-    private fun geoFenceBuilder(id: Long, reminder: ReminderDataItem) {
+    fun geoFenceBuilder(id: Long, reminder: ReminderDataItem) {
         val geofence = Geofence.Builder()
             .setRequestId(id.toString())
             .setExpirationDuration(TimeUnit.DAYS.toMillis(1))

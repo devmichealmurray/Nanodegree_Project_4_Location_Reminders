@@ -127,6 +127,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             val newMarker = map.addMarker(MarkerOptions().position(poi.latLng))
             launchPoiConfirmation(poi, newMarker)
         }
+
+        map.setOnMapLongClickListener {
+            val newMarker = map.addMarker(MarkerOptions().position(it))
+            launchLocationConfirmation(it, newMarker)
+        }
     }
 
     private fun launchPoiConfirmation(poi: PointOfInterest, marker: Marker) {
@@ -137,6 +142,24 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             positiveButton(getString(R.string.save_location)) { dialog ->
                 Toast.makeText(context, getString(R.string.location_stored), Toast.LENGTH_SHORT).show()
                 viewModel.storePoi(poi)
+                findNavController().navigate(R.id.action_selectLocationFragment_to_saveReminderFragment)
+                dialog.dismiss()
+            }
+            negativeButton(getString(R.string.cancel)) { dialog ->
+                marker.remove()
+                dialog.dismiss()
+            }
+        }.show()
+    }
+
+    private fun launchLocationConfirmation(location: LatLng, marker: Marker) {
+        alert {
+            title = getString(R.string.save_location)
+            message = "Would You Like To Save This Location?"
+            isCancelable = false
+            positiveButton(getString(R.string.save_location)) { dialog ->
+                Toast.makeText(context, getString(R.string.location_stored), Toast.LENGTH_SHORT).show()
+                viewModel.storeLocation(location)
                 findNavController().navigate(R.id.action_selectLocationFragment_to_saveReminderFragment)
                 dialog.dismiss()
             }
