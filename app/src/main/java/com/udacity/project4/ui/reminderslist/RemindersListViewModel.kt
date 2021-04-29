@@ -23,10 +23,6 @@ class RemindersListViewModel(
     private val _remindersList by lazy { MutableLiveData<List<ReminderDataItem>>() }
     val remindersList: LiveData<List<ReminderDataItem>> get() = _remindersList
 
-    /**
-     * Get all the reminders from the DataSource and add them to the remindersList to be shown on the UI,
-     * or show error if any
-     */
     fun loadReminders() {
         showLoading.value = true
         viewModelScope.launch {
@@ -45,9 +41,6 @@ class RemindersListViewModel(
         }
     }
 
-    /**
-     * Inform the user that there's not any data if the remindersList is empty
-     */
     private fun invalidateShowNoData() {
         showNoData.value = remindersList.value == null || remindersList.value!!.isEmpty()
     }
