@@ -59,20 +59,6 @@ class RemindersListViewModelTest {
     }
 
     @Test
-    fun showNoData_removeAllReminders_shouldReturnTrue() = runBlockingTest {
-        // Initialize live data
-        remindersListViewModel.showNoData.postValue(null)
-        // GIVEN -- reminders added to fakeDataSource are removed
-        fakeDataSource.deleteAllReminders()
-        // WHEN -- load data is called
-        remindersListViewModel.loadReminders()
-        // THEN -- loadNoData should return true
-        val noData = remindersListViewModel.showNoData.getOrAwaitValue()
-
-        assertThat(noData, `is`(true))
-    }
-
-    @Test
     fun loadReminders_hasError_shouldUpdateSnackbar() {
         // GIVEN -- Load Reminders has an error
         fakeDataSource.setReturnError(true)
@@ -83,6 +69,47 @@ class RemindersListViewModelTest {
 
         assertThat(errorMsg, `is`("Reminders Not Found"))
         fakeDataSource.setReturnError(false)
+    }
+
+    @Test
+    fun invalidateShowNoData_removeAllReminders_showNoDataIsTrue() = runBlockingTest {
+
+        // GIVEN -- reminders added to fakeDataSource are removed
+        fakeDataSource.deleteAllReminders()
+        // WHEN -- load data is called
+        remindersListViewModel.loadReminders()
+        // THEN -- loadNoData should return true
+        val noDataTrue = remindersListViewModel.showNoData.getOrAwaitValue()
+
+        assertThat(noDataTrue, `is`(true))
+    }
+
+    @Test
+    fun invalidateShowNoData_removeAllReminders_showNoDataIsFalse() = runBlockingTest {
+        // GIVEN -- reminders added to fakeDataSource are NOT removed
+        // WHEN -- load data is called
+        remindersListViewModel.loadReminders()
+        // THEN -- loadNoData should return true
+        val noDataTrue = remindersListViewModel.showNoData.getOrAwaitValue()
+
+        assertThat(noDataTrue, `is`(false))
+    }
+
+    @Test
+    fun showLoading_callLoadReminders_dataIsTrueOrFalse() {
+        // GIVEN -- the data source has reminders, pause the dispatcher
+        mainCoroutineRule.pauseDispatcher()
+        // WHEN -- load reminders is called
+        remindersListViewModel.loadReminders()
+        // THEN -- show loading value should be true
+        val loadingTrue = remindersListViewModel.showLoading.getOrAwaitValue()
+        assertThat(loadingTrue, `is`(true))
+
+        // WHEN -- dispatcher is resumed
+        mainCoroutineRule.resumeDispatcher()
+        // THEN -- show loading value should be false
+        val loadingFalse = remindersListViewModel.showLoading.getOrAwaitValue()
+        assertThat(loadingFalse, `is`(false))
     }
 
 
