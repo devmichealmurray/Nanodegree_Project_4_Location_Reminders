@@ -62,6 +62,10 @@ class RemindersLocalRepositoryTest {
         remindersDatabase.close()
     }
 
+
+    /**
+     * Testing for getReminders and saveReminders methods
+     */
     @Test
     fun saveReminders_getReminders_returnList() = mainCoroutineRule.runBlockingTest {
         // GIVEN -- call saveReminder to add list of reminders to database
@@ -77,6 +81,9 @@ class RemindersLocalRepositoryTest {
         assert(data.size == remindersList.size)
     }
 
+    /**
+     *  Testing for saveReminder and getReminder to return a single reminder by id
+     */
     @Test
     fun saveReminder_getReminder_returnSingleReminder() = mainCoroutineRule.runBlockingTest {
         // GIVEN -- call saveReminder to save a single Reminder
@@ -96,6 +103,9 @@ class RemindersLocalRepositoryTest {
         assertThat(savedReminder.longitude, `is`(reminder1.longitude))
     }
 
+    /**
+     *  Testing for deleteAllReminders
+     */
     @Test
     fun deleteAllReminders_addRemindersList_returnEmptyList() = mainCoroutineRule.runBlockingTest {
         // GIVEN -- call saveReminder to add list of reminders to database
@@ -105,12 +115,32 @@ class RemindersLocalRepositoryTest {
 
         // WHEN -- deleteAllReminders is called
         remindersRepository.deleteAllReminders()
-        
+
         //THEN -- no reminders should return when getReminders is called
         val list = remindersRepository.getReminders() as Result.Success<List<ReminderEntity>>
 
         assert(list.data.isEmpty())
     }
+
+    /**
+     *  Testing for deleteReminderByID
+     */
+    @Test
+    fun deleteReminderById_deleteSingleReminder_shouldNotReturnReminder() =
+        mainCoroutineRule.runBlockingTest {
+
+            // GIVEN -- add reminder to database
+            remindersRepository.saveReminder(reminder1)
+
+            // WHEN -- reminder is deleted
+            remindersRepository.deleteReminderById(reminder1.uid)
+
+            // THEN -- reminder should not be returned
+            val reminder = remindersRepository.getReminder(reminder1.uid) as Result.Error
+
+            assertThat(reminder.message, `is`("Reminder not found!"))
+    }
+
 
     /**
      *  Fake Data
